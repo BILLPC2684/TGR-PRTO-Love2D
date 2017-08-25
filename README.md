@@ -3,8 +3,7 @@ TheGameRazer is a custom retro 16-bit style emulator made in love2D(lua game eng
 It's still in prototype stages...
 
 # how to run
-download via zip or git
-lovec ./ <ROM.bin>
+download via zip or git: `lovec ./ <ROM.bin>`
 
 # how to make ROMs
 there will be the IS recorded down onto the wiki page soon...

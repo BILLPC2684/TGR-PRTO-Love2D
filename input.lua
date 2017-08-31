@@ -111,69 +111,50 @@ function get_input(controlllerID)
  end
  if input[controlllerID] == 0 then
   --[[keyboard]]--
+  local uinput = {
+   love.keyboard.isDown(A[controlllerID]),        --A
+   love.keyboard.isDown(B[controlllerID]),        --B
+   love.keyboard.isDown(C[controlllerID]),        --C
+   love.keyboard.isDown(X[controlllerID]),        --X
+   love.keyboard.isDown(Y[controlllerID]),        --Y
+   love.keyboard.isDown(Z[controlllerID]),        --Z
+   love.keyboard.isDown(L[controlllerID]),        --L
+   love.keyboard.isDown(R[controlllerID]),        --R
+   love.keyboard.isDown(START[controlllerID]),    --Start
+   love.keyboard.isDown(SELECT[controlllerID]),   --Select
+   love.keyboard.isDown(UP[controlllerID]),       --Up
+  }
   if controlllerID == 0 then
-   input.controller0[0x0] = love.keyboard.isDown(A[controlllerID])		--A
-   input.controller0[0x1] = love.keyboard.isDown(B[controlllerID])		--B
-   input.controller0[0x2] = love.keyboard.isDown(C[controlllerID])		--C
-   input.controller0[0x3] = love.keyboard.isDown(X[controlllerID])		--X
-   input.controller0[0x4] = love.keyboard.isDown(Y[controlllerID])		--Y
-   input.controller0[0x5] = love.keyboard.isDown(Z[controlllerID])		--Z
-   input.controller0[0x6] = love.keyboard.isDown(L[controlllerID])		--L
-   input.controller0[0x7] = love.keyboard.isDown(R[controlllerID])		--R
-   input.controller0[0x8] = love.keyboard.isDown(START[controlllerID])	--Start
-   input.controller0[0x9] = love.keyboard.isDown(SELECT[controlllerID])	--Select
-   input.controller0[0xA] = love.keyboard.isDown(UP[controlllerID])		--Up
-   input.controller0[0xB] = love.keyboard.isDown(DOWN[controlllerID])	--Down
-   input.controller0[0xC] = love.keyboard.isDown(LEFT[controlllerID])	--Left
-   input.controller0[0xD] = love.keyboard.isDown(RIGHT[controlllerID])	--Right
+   input.controller0 = uinput
   elseif controlllerID == 1 then
-   input.controller1[0x0] = love.keyboard.isDown(A[controlllerID])		--A
-   input.controller1[0x1] = love.keyboard.isDown(B[controlllerID])		--B
-   input.controller1[0x2] = love.keyboard.isDown(C[controlllerID])		--C
-   input.controller1[0x3] = love.keyboard.isDown(X[controlllerID])		--X
-   input.controller1[0x4] = love.keyboard.isDown(Y[controlllerID])		--Y
-   input.controller1[0x5] = love.keyboard.isDown(Z[controlllerID])		--Z
-   input.controller1[0x6] = love.keyboard.isDown(L[controlllerID])		--L
-   input.controller1[0x7] = love.keyboard.isDown(R[controlllerID])		--R
-   input.controller1[0x8] = love.keyboard.isDown(START[controlllerID])	--Start
-   input.controller1[0x9] = love.keyboard.isDown(SELECT[controlllerID])	--Select
-   input.controller1[0xA] = love.keyboard.isDown(UP[controlllerID])		--Up
-   input.controller1[0xB] = love.keyboard.isDown(DOWN[controlllerID])	--Down
-   input.controller1[0xC] = love.keyboard.isDown(LEFT[controlllerID])	--Left
-   input.controller1[0xD] = love.keyboard.isDown(RIGHT[controlllerID])	--Right
+   input.controller1 = uinput
   end
  else
   --[[controller]]--
+  local uinput = {
+   love.gamepadpressed(joysticks[input[controlllerID]],"a"),			--A
+   love.gamepadpressed(joysticks[input[controlllerID]],"b"),			--B
+   joysticks[input[controlllerID]]:getGamepadAxis("triggerleft"),		--C
+   love.gamepadpressed(joysticks[input[controlllerID]],"x"),			--X
+   love.gamepadpressed(joysticks[input[controlllerID]],"y"),			--Y
+   joysticks[input[controlllerID]]:getGamepadAxis("triggerleft"),		--Z
+   love.gamepadpressed(joysticks[input[controlllerID]],"leftsholder"),	--L
+   love.gamepadpressed(joysticks[input[controlllerID]],"rightsholder"),--R
+   love.gamepadpressed(joysticks[input[controlllerID]],"start"),		--Start
+   love.gamepadpressed(joysticks[input[controlllerID]],"back"), 		--Select
+   love.gamepadpressed(joysticks[input[controlllerID]],"dpup") or
+    (joysticks[input[controlllerID]]:getGamepadAxis("lefty") < 0.5),	--Up
+   love.gamepadpressed(joysticks[input[controlllerID]],"dpdown") or
+    (joysticks[input[controlllerID]]:getGamepadAxis("lefty") > 0.5),	--Down
+   love.gamepadpressed(joysticks[input[controlllerID]],"dpleft") or
+    (joysticks[input[controlllerID]]:getGamepadAxis("leftx") < 0.5),	--Left
+   love.gamepadpressed(joysticks[input[controlllerID]],"dpright") or
+    (joysticks[input[controlllerID]]:getGamepadAxis("leftx") > 0.5),	--Right
+  }
   if controlllerID == 0 then
-   input.controller0[0x0] = love.gamepadpressed(joysticks[input[controlllerID]],"a")			-->>															--A
-   input.controller0[0x1] = love.gamepadpressed(joysticks[input[controlllerID]],"b")			-->>															--B
-   input.controller0[0x2] = joysticks[input[controlllerID]]:getGamepadAxis("triggerleft")		-->>															--C
-   input.controller0[0x3] = love.gamepadpressed(joysticks[input[controlllerID]],"x")			-->>															--X
-   input.controller0[0x4] = love.gamepadpressed(joysticks[input[controlllerID]],"y")			-->>															--Y
-   input.controller0[0x5] = joysticks[input[controlllerID]]:getGamepadAxis("triggerleft")		-->>															--Z
-   input.controller0[0x6] = love.gamepadpressed(joysticks[input[controlllerID]],"leftsholder")	-->>															--L
-   input.controller0[0x7] = love.gamepadpressed(joysticks[input[controlllerID]],"rightsholder")	-->>															--R
-   input.controller0[0x8] = love.gamepadpressed(joysticks[input[controlllerID]],"start")		-->>															--Start
-   input.controller0[0x9] = love.gamepadpressed(joysticks[input[controlllerID]],"back") 		-->>															--Select
-   input.controller0[0xA] = love.gamepadpressed(joysticks[input[controlllerID]],"dpup")    or (joysticks[input[controlllerID]]:getGamepadAxis("lefty") < 0.5)	--Up
-   input.controller0[0xB] = love.gamepadpressed(joysticks[input[controlllerID]],"dpdown")  or (joysticks[input[controlllerID]]:getGamepadAxis("lefty") > 0.5)	--Down
-   input.controller0[0xC] = love.gamepadpressed(joysticks[input[controlllerID]],"dpleft")  or (joysticks[input[controlllerID]]:getGamepadAxis("leftx") < 0.5)	--Left
-   input.controller0[0xD] = love.gamepadpressed(joysticks[input[controlllerID]],"dpright") or (joysticks[input[controlllerID]]:getGamepadAxis("leftx") > 0.5)	--Right
+   input.controller0 = uinput
   elseif controlllerID == 1 then
-   input.controller1[0x0] = love.gamepadpressed(joysticks[input[controlllerID]],"a")			-->>															--A
-   input.controller1[0x1] = love.gamepadpressed(joysticks[input[controlllerID]],"b")			-->>															--B
-   input.controller1[0x2] = joysticks[input[controlllerID]]:getGamepadAxis("triggerleft")		-->>															--C
-   input.controller1[0x3] = love.gamepadpressed(joysticks[input[controlllerID]],"x")			-->>															--X
-   input.controller1[0x4] = love.gamepadpressed(joysticks[input[controlllerID]],"y")			-->>															--Y
-   input.controller1[0x5] = joysticks[input[controlllerID]]:getGamepadAxis("triggerleft")		-->>															--Z
-   input.controller1[0x6] = love.gamepadpressed(joysticks[input[controlllerID]],"leftsholder")	-->>															--L
-   input.controller1[0x7] = love.gamepadpressed(joysticks[input[controlllerID]],"rightsholder")	-->>															--R
-   input.controller1[0x8] = love.gamepadpressed(joysticks[input[controlllerID]],"start")		-->>															--Start
-   input.controller1[0x9] = love.gamepadpressed(joysticks[input[controlllerID]],"back") 		-->>															--Select
-   input.controller1[0xA] = love.gamepadpressed(joysticks[input[controlllerID]],"dpup")    or (joysticks[input[controlllerID]]:getGamepadAxis("lefty") < 0.5)	--Up
-   input.controller1[0xB] = love.gamepadpressed(joysticks[input[controlllerID]],"dpdown")  or (joysticks[input[controlllerID]]:getGamepadAxis("lefty") > 0.5)	--Down
-   input.controller1[0xC] = love.gamepadpressed(joysticks[input[controlllerID]],"dpleft")  or (joysticks[input[controlllerID]]:getGamepadAxis("leftx") < 0.5)	--Left
-   input.controller1[0xD] = love.gamepadpressed(joysticks[input[controlllerID]],"dpright") or (joysticks[input[controlllerID]]:getGamepadAxis("leftx") > 0.5)	--Right
+   input.controller1 = uinput
   end  
  end
 end

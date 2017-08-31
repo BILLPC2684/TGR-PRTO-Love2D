@@ -17,11 +17,11 @@ function love.run()
   love.timer.step()
   -- Call update and draw
   love.update()
- -- love.graphics.clear(love.graphics.getBackgroundColor())
- --  love.graphics.origin()
+  --love.graphics.clear(love.graphics.getBackgroundColor())
+  --love.graphics.origin()
   love.draw()
-  love.graphics.present()
---  if love.timer then love.timer.sleep(0.001) end
+  --love.graphics.present()
+  --if love.timer then love.timer.sleep(0.001) end
  end
 end
 
@@ -38,7 +38,7 @@ getmetatable('').__index = function(str,i)
 end
 
 function love.load(args)
- version = "PRTO v0.74a"
+ version = "PRTO v0.74b"
  print("LOADING \""..version.."\"...")
  import = {"init","input","cpu"}
  for i=1,#import do
@@ -70,6 +70,10 @@ function love.load(args)
  else
   debug = false
  end
+ if #args > 2 and args[3] == "--speed" then
+  sptest = love.timer.getTime()
+  print("[>] Started timer...")
+ end
  frame = 0
  FPS = 0
  RF = 0
@@ -84,8 +88,12 @@ function love.update(dt)
  if CPU.HALT == true then
   if programhalt == false then
    print("\nEMU: We have detected the main loop has stopped due to a halt...")
-   print("The screen isn't active but is can still be viewed, to reset the emulator")
-   print("you need to goto your terminal and press [CTRL] + [C] and relaunch.")
+   print("This is due to a halt(meaning the program has ended) or the Emulator Error.")
+   print("If there is a Emulation Error check above for what the probblem is in the ROM.")
+   print("The screen isn't active but is can still be viewed, to reset the emulator you\n need to goto your terminal and press [CTRL] + [C] and relaunch.")
+   if sptest then
+    print("[||] Stopped, time took to calculate: "..love.timer.getTime()-sptest)
+   end
    programhalt = true
   end
  else
@@ -98,12 +106,13 @@ function love.update(dt)
   exec()
   if MAXIPS < EMU.IPS then
    MAXIPS = EMU.IPS
+   print("Best IPS: "..MAXIPS)
   end
  end
 end
 function love.draw()
- --print()
- if GPU.update == true then
+ --print(FPS, EMU.frameskip, frame, GPU.update, CPU.HALT)
+ if GPU.update == true and CPU.HALT == false then
   if FPS >= EMU.framelimmit then
    local tm = love.timer.getTime()
    while tm == love.timer.getTime() do
@@ -113,15 +122,19 @@ function love.draw()
    FPS = 0
   else
    GPU.update = false
-    if EMU.frameskip == frame then
-     love.graphics.clear(love.graphics.getBackgroundColor())
-     love.graphics.draw(GPU.screen)
-     love.graphics.print("FPS: "..RF.."\t| IPS: "..EMU.IPS.."\t| Best IPS: "..MAXIPS,10,SH-15)
-     frame = 0
-     FPS = FPS + 1
-    else
-     frame = frame + 1
-    end
+   if EMU.frameskip == frame then
+    love.graphics.clear(love.graphics.getBackgroundColor())
+    love.graphics.draw(GPU.screen)
+	love.graphics.setColor(0xFF,0xFF,0xFF)
+    love.graphics.print("FPS: "..RF.."\t| IPS: "..EMU.IPS.."\t| Best IPS: "..MAXIPS,10,SH-15)
+	love.graphics.setColor(0,0,0)
+    love.graphics.print("FPS: "..RF.."\t| IPS: "..EMU.IPS.."\t| Best IPS: "..MAXIPS,11,SH-14)
+	love.graphics.present()
+    frame = 0
+    FPS = FPS + 1
+   else
+    frame = frame + 1
+   end
   end
  end
 end

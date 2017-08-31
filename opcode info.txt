@@ -4,10 +4,10 @@ DEVICE-NUMBER can be from 0 to 15(0x0-0xf)
  ________
 |_DVCNUM_|______________________________________
 |_ports_|_______________name/info_______________|
-|0x0	|Contoller0								|
-|0x1	|Contoller1								|
-|0x2	|GPU									|
-|0x3	|Sound									|
+|0x0	|Contoller0				|
+|0x1	|Contoller1				|
+|0x2	|GPU					|
+|0x3	|Sound					|
 |0x4	|Network(connection between consoles)	|
 |_______|_______________________________________|
 

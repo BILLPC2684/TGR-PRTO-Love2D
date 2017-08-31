@@ -87,10 +87,10 @@ end
      --if Running , EMU logs , allocating RAMPOS , AutoClose?   , frames to skip, CPS counter , Time For Detection CPS Output , fullscreen mode?  , counter, 
 SH = 340 --Y
 SW = 480 --X
-EMU = {running = 1, logs = "", vsync = 0, frameskip = 120, framelimmit = 60, RAMPOS = {0,0,0,0}, softClose = 1, commands = 0, timesec = love.timer.getTime(), fullscreen = false, IPS = 0, }
+EMU = {running = 1, logs = "", vsync = false, frameskip = 0, framelimmit = 60, RAMPOS = {0,0,0,0}, softClose = 1, commands = 0, timesec = love.timer.getTime(), fullscreen = false, IPS = 0, }
 ROM = {}
 BIOS = {}
-CPU = {REGS = {A = 0, B = 0, C = 0, D = 0, E = 0, F = 0, G = 0, H = 0}, bit = 16, PC = 1}
+CPU = {REGS = {A = 0, B = 0, C = 0, D = 0, E = 0, F = 0, G = 0, H = 0}, bit = 16, PC = 1, HALT = false}
 SND = {L = {{type = "Pulse", vol = 0, pitch = 0},{type = "Pulse", vol = 0, pitch = 0},{type = "Noise", vol = 0, pitch = 0},{type = "Sawtooth", vol = 0, pitch = 0}},R = {{type = "Pulse", vol = 0, pitch = 0},{type = "Pulse", vol = 0, pitch = 0},{type = "Noise", vol = 0, pitch = 0},{type = "Sawtooth", vol = 0, pitch = 0}}}
 GPU = {X = 0, Y = 0, R = 0, G = 0, B = 0, VRAM = "", screen = love.graphics.newCanvas(SW,SH), buffer = love.graphics.newCanvas(SW,SH), update = false}
 RAM = ""

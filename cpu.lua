@@ -51,7 +51,7 @@ function exec()
    if debug == true then
     EMU.logs = EMU.logs.."LOAD "..ROM[CPU.PC-3]..","..callREG(ROM[CPU.PC-2])..","..ROM[CPU.PC-1]..","..ROM[CPU.PC].."\t"
    end
-   print(ROM[CPU.PC-1],ROM[CPU.PC],tonumber(tohex(ROM[CPU.PC-1])..tohex(ROM[CPU.PC]),16))
+   --print(ROM[CPU.PC-1],ROM[CPU.PC],tonumber(tohex(ROM[CPU.PC-1])..tohex(ROM[CPU.PC]),16))
    CPU.REGS[callREG(ROM[CPU.PC-2])] = tonumber(tohex(ROM[CPU.PC-1])..tohex(ROM[CPU.PC]),16)
   end
  elseif ROM[CPU.PC] == 0x02 then
@@ -286,14 +286,23 @@ function exec()
     love.graphics.rectangle("fill", GPU.X, GPU.Y, 1, 1)
 	love.graphics.setCanvas()
    elseif ROM[CPU.PC-1] == 0x06 then --update
-    GPU.screen = (GPU.buffer)
-    --print(GPU.X, GPU.Y, GPU.R, GPU.G, GPU.B)
+    --GPU.screen = (GPU.buffer)
+    -- create a new canvas of the same dimensions beforehand, and then:
+    love.graphics.push("all")
+    love.graphics.setCanvas(GPU.screen)
+    love.graphics.setBlendMode("replace", "premultiplied")
+    love.graphics.draw(GPU.buffer, 0, 0)
+    love.graphics.pop()
+	love.graphics.setCanvas()
+    --print(GPU.screen, GPU.buffer, GPU.X, GPU.Y, GPU.R, GPU.G, GPU.B)
 	GPU.update = true
    else
-    print("NOTTIC: Unknown device Opcode: "..ROM[CPU.PC-1].. "(for DeviceID:"..DeviceID..")")
+    print("Emu Error: "..CPU.PC..": Unknown Device Opcode: "..ROM[CPU.PC-1].. "(for DeviceID:"..DeviceID..")")
+    CPU.HALT = true
    end
   else
-   print("NOTTIC: Unknown deviceID: "..DeviceID)
+   print("Emu Error: "..CPU.PC..": Unknown DeviceID: "..DeviceID)
+   CPU.HALT = true
   end
   
  elseif ROM[CPU.PC] == 0x1e then
@@ -308,8 +317,15 @@ function exec()
   elseif DeviceID == 2 then --GPU
    if ROM[CPU.PC-1] == 0x00 then --READ PIXEL
     GPUread(X,Y,REGS[callREG(ROM[CPU.PC])])
+   else
+    print("Emu Error: "..CPU.PC..": Unknown Device Opcode: "..ROM[CPU.PC-1].. "(for DeviceID:"..DeviceID..")")
+    CPU.HALT = true
    end
+  else
+   print("Emu Error: "..CPU.PC..": Unknown DeviceID: "..DeviceID)
+   CPU.HALT = true
   end
+  
  elseif ROM[CPU.PC] == 0x1f then
   CPU.PC = CPU.PC + 4
   l = ROM[CPU.PC]
@@ -319,38 +335,55 @@ function exec()
   end
   if ROM[CPU.PC-3] == 0 then
    if CPU.REGS[callREG(ROM[CPU.PC-2])] == CPU.REGS[callREG(ROM[CPU.PC-1])] then
-    ----print("true")
+    if debug == true then
+     print("true")
+	end
+	CPU.PC = l
    else
-    ----print("false")
-    CPU.PC = CPU.PC + l
+    if debug == true then
+     print("false")
+	end
    end
   elseif ROM[CPU.PC-3] == 1 then
    if CPU.REGS[callREG(ROM[CPU.PC-2])] < CPU.REGS[callREG(ROM[CPU.PC-1])] then
-    --print("true")
+    if debug == true then
+     print("true")
+	end
+	CPU.PC = l
    else
-    --print("false")
-    CPU.PC = CPU.PC + l
+    if debug == true then
+     print("false")
+	end
    end
   elseif ROM[CPU.PC-3] == 2 then
    if CPU.REGS[callREG(ROM[CPU.PC-2])] > CPU.REGS[callREG(ROM[CPU.PC-1])] then
-    --print("true")
+    if debug == true then
+     print("true")
+	end
+	CPU.PC = l
    else
-    --print("false")
-    CPU.PC = CPU.PC + l
+    if debug == true then
+     print("false")
+	end
    end
   elseif ROM[CPU.PC-3] == 3 then
    if CPU.REGS[callREG(ROM[CPU.PC-2])] ~= CPU.REGS[callREG(ROM[CPU.PC-1])] then
-    --print("true")
+    if debug == true then
+     print("true")
+	end
+	CPU.PC = l
    else
-    --print("false")
-    CPU.PC = CPU.PC + l
+    if debug == true then
+     print("false")
+	end
    end
   end
   
  elseif ROM[CPU.PC] == 0x20 then
   
  else
-  error("Unknowned OperationCode: "..ROM[CPU.PC])
+  print("Emu Error: "..CPU.PC..": Unknowned OperationCode: "..ROM[CPU.PC])
+  CPU.HALT = true
  end
  if debug == true then
   EMU.logs = EMU.logs.."\t|\t"
@@ -363,7 +396,6 @@ function exec()
  CPU.PC = CPU.PC + 1
  CPU.commands = CPU.commands + 1
  if math.floor(EMU.timesec)+1 == math.floor(love.timer.getTime()) then
-  --print("IPS: "..CPU.commands)
   EMU.IPS = CPU.commands
   CPU.commands = 0
   if CPU.commands >= MB.HertzLimmit then

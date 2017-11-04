@@ -2,8 +2,11 @@
 TheGameRazer is a custom retro 16-bit style emulator made in love2D(lua game engine)
 It's still in prototype stages...
 
+# what is love2D?
+love2D is a game engine that runs off of lua and it's awesome what you can do with it... you can get it at: https://love2d.org
+
 # how to run
-download via zip(extract it) or git then run in terminal/terminal: `lovec ./ <ROM.bin>` if lovec dosen't exist try just typing `love` for debug testing ROMs run the arg `--debug` after giving the ROM name.
+download via zip(extract it) or git then run in terminal/terminal: `lovec ./ <ROMFileName.bin>` if lovec dosen't exist try just typing `love` for ROM debug testing run the arg `--debug` after giving the ROM Filename.
 
 # how to make ROMs
 the file `opcode info.txt` has the InstuctionSet recorded on it, look at the wiki for more info...

@@ -1,6 +1,6 @@
 # THIS HAS BEEN DISCONTINUED...
-## click here to goto the new updated version:\
-## https://github.com/BILLPC2684/TGR-PRTO-C
+## click here to goto the new updated version:
+ https://github.com/BILLPC2684/TGR-PRTO-C
 
 # TGR-PRTO-Love2D
 TheGameRazer is a custom retro 16-bit style emulator made in love2D(lua game engine)
